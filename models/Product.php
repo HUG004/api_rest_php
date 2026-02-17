@@ -1,5 +1,5 @@
 <?php
-class Product
+class Producto
 {
     private $conn;
     private $table_name = "productos";
@@ -10,7 +10,6 @@ class Product
     public $description;
     public $price;
     public $stock;
-    public $created_at;
 
     public function __construct($db)
     {
@@ -19,7 +18,7 @@ class Product
 
     public function create()
     {
-        $query = "INSERT INTO {$this->table_name}
+        $query = "INSERT INTO " . $this->table_name . "
                   SET sku=:sku, name=:name, description=:description,
                       price=:price, stock=:stock";
 
@@ -40,7 +39,7 @@ class Product
 
     public function read()
     {
-        $query = "SELECT * FROM {$this->table_name} ORDER BY created_at DESC";
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY created_at DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
@@ -48,15 +47,12 @@ class Product
 
     public function readOne()
     {
-        $query = "SELECT * FROM {$this->table_name}
-                  WHERE id = :id LIMIT 1";
-
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id=:id LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $this->id);
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
         if ($row) {
             foreach ($row as $key => $value) {
                 $this->$key = $value;
@@ -68,7 +64,7 @@ class Product
 
     public function update()
     {
-        $query = "UPDATE {$this->table_name}
+        $query = "UPDATE " . $this->table_name . "
                   SET sku=:sku, name=:name, description=:description,
                       price=:price, stock=:stock
                   WHERE id=:id";
@@ -87,7 +83,7 @@ class Product
 
     public function delete()
     {
-        $query = "DELETE FROM {$this->table_name} WHERE id=:id";
+        $query = "DELETE FROM " . $this->table_name . " WHERE id=:id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $this->id);
         return $stmt->execute();
